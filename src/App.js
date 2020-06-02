@@ -13,36 +13,7 @@ import {
 import api from './services/api';
 
 export default function App() {
-  const [repositories, setRepositories] = useState([
-    {
-      id: '1',
-      title: 'Rocketshoes',
-      url: 'https://www.github.com/sammuelgr/rocketshoes',
-      techs: ['React', 'JavaScript', 'Node.js'],
-      likes: 0
-    },
-    {
-      id: '2',
-      title: 'AirCnc',
-      url: 'https://www.github.com/sammuelgr/aircnc',
-      techs: ['React Native', 'JavaScript', 'Node.js'],
-      likes: 0
-    },
-    {
-      id: '3',
-      title: 'GoBarber',
-      url: 'https://www.github.com/sammuelgr/gobarber',
-      techs: ['Sequelize', 'JavaScript', 'Node.js'],
-      likes: 0
-    },
-    {
-      id: '4',
-      title: 'Hunt',
-      url: 'https://www.github.com/sammuelgr/react-native-hunt',
-      techs: ['React Native', 'JavaScript'],
-      likes: 0
-    }
-  ]);
+  const [repositories, setRepositories] = useState([]);
 
   useEffect(() => {
     api.get('/repositories').then(response => {
@@ -51,7 +22,11 @@ export default function App() {
   }, []);
 
   async function handleLikeRepository(id) {
-    // Implement "Like Repository" functionality
+    const response = await api.post(`/repositories/${id}/like`);
+    
+    const repository = response.data;
+
+    setRepositories([...repositories.map(repo => repo.id == id ? repository : repo )]);
   }
 
   return (
